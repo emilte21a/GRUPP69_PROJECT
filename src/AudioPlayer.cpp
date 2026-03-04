@@ -21,7 +21,7 @@ void AudioPlayer::Play()
 {
     if (!clip || clip->pcm.empty())
         return;
-
+    
     if (deviceID == 0)
     {
         deviceID = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);

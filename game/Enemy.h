@@ -6,7 +6,7 @@ class Enemy : public Entity
 public:
     Enemy();
     void Update() override;
-    void OnCollision() override;
+    void OnCollision(GameObject &other) override;
     void OnEvent(const SDL_Event &event) override;
 
 private:

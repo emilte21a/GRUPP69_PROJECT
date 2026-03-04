@@ -1,20 +1,21 @@
 #include "Enemy.h"
+#include "Player.h"
 #include "Renderer.h"
 #include "PhysicsBody.h"
 #include <GameEngine.h>
 #include <iostream>
 
-Enemy::Enemy()
+Enemy::Enemy() : Entity()
 {
-    Entity();
-    position = Vector2(200, 0);
+    position = Vector2(300, 0);
     gravityStrength = 400;
     moveSpeed = 50;
     jumpForce = 150;
-   
+
     GetComponent<PhysicsBody>()->SetShouldUseGravity(true);
     GetComponent<PhysicsBody>()->SetGravityStrength(gravityStrength);
     GetComponent<Renderer>()->SetTexture(GameEngine::textureManager.AddTexture(constants::fiende_str));
+    SetTag("Enemy");
 }
 
 void Enemy::Update()
@@ -25,8 +26,13 @@ void Enemy::Update()
     GetComponent<Renderer>()->SetDirectionMultiplier(dir);
 }
 
-void Enemy::OnCollision()
+void Enemy::OnCollision(GameObject &other)
 {
+    if (other.GetTag() == "Bullet")
+    {
+        MarkForDestruction();
+        other.MarkForDestruction();
+    }
 }
 
 void Enemy::OnEvent(const SDL_Event &event)
@@ -43,7 +49,9 @@ void Enemy::HandleMove()
         timer -= 1.0;
     }
 
-    position.x += dir * moveSpeed * GameEngine::engine.GetDeltaTime();
+    auto *pB = GetComponent<PhysicsBody>();
+
+    pB->SetVelocity(Vector2(dir * moveSpeed, pB->GetVelocity().y));
 }
 
 void Enemy::HandleJump()

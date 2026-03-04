@@ -17,6 +17,8 @@ namespace constants
 	const std::string fiende_str{gResPath + "images/fiende.png"};
 	const std::string idle_str{gResPath + "images/characteridle.png"};
 	const std::string sample_str{gResPath + "sounds/sample.wav"};
+	const std::string jump_str{gResPath + "sounds/jumpSoundEffect.wav"};
+	const std::string arial_str{gResPath + "fonts/arial.ttf"};
 }
 
 #endif

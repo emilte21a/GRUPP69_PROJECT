@@ -5,7 +5,7 @@ namespace GameEngine
 {
     void PhysicsSystem::Update()
     {
-        for (auto &go : engine.getGameObjects())
+        for (auto &go : engine.GetGameObjects())
         {
             auto *pB = go->GetComponent<PhysicsBody>();
 
@@ -18,8 +18,8 @@ namespace GameEngine
             {
                 pB->GetVelocity().y += pB->GetGravityStrength() * engine.GetDeltaTime();
             }
-
-            pB->owner->GetPosition() += ((pB->GetVelocity() * engine.GetDeltaTime()));
+            Vector2 newPos = pB->owner->GetPosition() + pB->GetVelocity() * engine.GetDeltaTime();
+            pB->owner->SetPosition(newPos);
         }
     }
 }

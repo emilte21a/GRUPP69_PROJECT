@@ -21,6 +21,7 @@ namespace GameEngine
     {
         textureManager.Clear();
         gameObjects.clear();
+        TTF_Quit();
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         SDL_Quit();
@@ -86,6 +87,14 @@ namespace GameEngine
             if (gameObjects[i])
                 gameObjects[i]->Update();
         }
+
+        for (int i = static_cast<int>(gameObjects.size()) - 1; i >= 0; --i)
+        {
+            if (gameObjects[i]->ShouldBeDestroyed())
+            {
+                gameObjects.erase(gameObjects.begin() + i);
+            }
+        }
     }
 
     void GameEngine::Draw()
@@ -106,6 +115,7 @@ namespace GameEngine
     {
         SDL_Init(SDL_INIT_VIDEO);
         SDL_Init(SDL_INIT_AUDIO);
+        TTF_Init();
         window = SDL_CreateWindow("Game", constants::gScreenWidth, constants::gScreenHeight, 0);
         renderer = SDL_CreateRenderer(window, NULL);
     }

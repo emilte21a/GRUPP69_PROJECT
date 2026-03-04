@@ -13,7 +13,12 @@ public:
         tex = newTex;
         SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_NEAREST);
     }
-
+    /*
+    Jätte dålig fix, men jag vill inte skapa en "animator" komponent. Det skulle kräva att två separata
+    klasser får i princip samma struktur. Därför gjorde jag på detta automatiska sätt, där spritestorleken 
+    jämförs med självaste objektets rektangel. Det kommer att medföra problem, speciellt om man vill ha en mindre 
+    rektangel för objektet men en större sprite då den kommer att försöka animera spriten isåfall. 
+    */
     void Draw(SDL_Renderer *ren)
     {
         SDL_FRect dst = owner->GetRect();

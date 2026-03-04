@@ -9,7 +9,7 @@ namespace GameEngine
 
     void CollisionSystem::Update()
     {
-        auto &gameObjects = engine.getGameObjects();
+        auto &gameObjects = engine.GetGameObjects();
 
         for (size_t i = 0; i < gameObjects.size(); ++i)
         {
@@ -21,11 +21,24 @@ namespace GameEngine
                 if (!CheckCollision(a->GetRect(), b->GetRect()))
                     continue;
 
+                if (a->GetTag() == "Text" || b->GetTag() == "Text")
+                    continue;
+
                 SDL_FRect collisionRect = GetCollisionRectangle(a->GetRect(), b->GetRect());
                 axis resolveAxis = (collisionRect.w < collisionRect.h) ? x : y;
 
                 auto aHasPB = a->GetComponent<PhysicsBody>() != nullptr;
                 auto bHasPB = b->GetComponent<PhysicsBody>() != nullptr;
+
+                bool isTriggerCollision = ((aHasPB && a->GetComponent<PhysicsBody>()->IsTrigger()) ||
+                                           (bHasPB && b->GetComponent<PhysicsBody>()->IsTrigger()));
+
+                if (isTriggerCollision)
+                {
+                    a->OnCollision(*b);
+                    b->OnCollision(*a);
+                    continue;
+                }
 
                 if (aHasPB)
                 {
@@ -74,8 +87,8 @@ namespace GameEngine
             a->SetPosition(pos);
             pB->SetVelocity(Vector2(0, pB->GetVelocity().y));
         }
-        a->OnCollision();
-        b->OnCollision();
+        a->OnCollision(*b);
+        b->OnCollision(*a);
     }
 
     bool CollisionSystem::CheckCollision(const SDL_FRect &a, const SDL_FRect &b)

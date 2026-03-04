@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <vector>
 #include <memory>
 #include "GameObject.h"
@@ -12,6 +13,9 @@
 
 namespace GameEngine
 {
+    // ensure the name is known here before the extern below
+    class InputManager;
+
     class GameEngine
     {
     public:
@@ -27,9 +31,9 @@ namespace GameEngine
         void AddGameObject(std::unique_ptr<GameObject> gameObject);
         void RemoveGameObject(GameObject* gameObject);
         void RemoveAllGameObjects();
-        std::vector<std::unique_ptr<GameObject>> &getGameObjects() { return gameObjects; }
+        std::vector<std::unique_ptr<GameObject>> &GetGameObjects() { return gameObjects; }
         float GetDeltaTime() { return deltaTime; }
-        void SetFpsLimit(int newLimit) { fpsLimit = fpsLimit > 0 ? newLimit : 0; }
+        void SetFpsLimit(int newLimit) { fpsLimit = newLimit > 0 ? newLimit : 0; }
         void SetBackgroundColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a) { bgColor = {r, g, b, a}; }
 
     private:

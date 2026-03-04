@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Tile.h"
 #include "Enemy.h"
+#include "TextObject.h"
 #include <GameEngine.h>
 
 Game::Game()
@@ -12,6 +13,12 @@ Game::Game()
     GameEngine::engine.AddGameObject(std::make_unique<Enemy>());
     PlaceTiles();
     PlacePlatforms();
+    auto text = std::make_unique<TextObject>(
+        "Hello world",
+        constants::arial_str, 32, Color{0, 0, 0, 255});
+
+    text->SetPosition({200, 200});
+    GameEngine::engine.AddGameObject(std::move(text));
 }
 
 Game::~Game()
@@ -24,7 +31,7 @@ void Game::PlacePlatforms()
     for (int i = 0; i < 3; ++i)
     {
         auto t = std::make_unique<Tile>();
-        t->SetPosition(Vector2(100 + i * (constants::unitSize ), constants::gScreenHeight - 200));
+        t->SetPosition(Vector2(100 + i * (constants::unitSize), constants::gScreenHeight - 200));
 
         GameEngine::engine.AddGameObject(std::move(t));
     }

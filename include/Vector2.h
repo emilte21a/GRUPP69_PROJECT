@@ -73,12 +73,23 @@ struct Vector2
         return SDL_sqrt(SDL_pow(rhs.x - lhs.x, 2) + SDL_pow(rhs.y - lhs.y, 2));
     }
 
+    Vector2 &Normalize()
+    {
+        float l = SDL_sqrt(SDL_pow(x, 2) + SDL_pow(y, 2));
+        if (l != 0.0f)
+        {
+            x /= l;
+            y /= l;
+        }
+        return *this;
+    }
+
     friend std::ostream &operator<<(std::ostream &os, const Vector2 &vec);
 };
 
 inline std::ostream &operator<<(std::ostream &os, const Vector2 &vec)
 {
-    os << "X: " << vec.x << " Y: " << vec.y << std::endl;   
+    os << "X: " << vec.x << " Y: " << vec.y << std::endl;
 
     return os;
 }

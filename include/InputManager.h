@@ -2,72 +2,122 @@
 
 #include <SDL3/SDL.h>
 #include <vector>
-
-class InputManager {
-public:
-    enum class Key {
-        A, D, W, S, Space
-    };
-
-    void BeginFrame() {
-        prevKeyState = currentKeyState;
-    }
-
-    void HandleEvent(const SDL_Event& event) {
-        if (event.type == SDL_EVENT_KEY_DOWN) {
-            currentKeyState[event.key.scancode] = true;
-        } 
-        else if (event.type == SDL_EVENT_KEY_UP) {
-            currentKeyState[event.key.scancode] = false;
-        }
-    }
-
-    void Update()
+#include <GameEngine.h>
+namespace GameEngine
+{
+    class InputManager
     {
-        const bool *state = SDL_GetKeyboardState(nullptr);
-        if (!state) return;
-        for (int i = 0; i < SDL_SCANCODE_COUNT; ++i)
-            currentKeyState[i] = state[i] != 0;
-    }
+    public:
+        // lätt men dumt sätt att hantera knapptryckningar
+        enum class Key
+        {
+            Unknown = 0,
 
-    bool IsKeyDown(Key key) const {
-        return currentKeyState[ScancodeFor(key)];
-    }
+            A,
+            B,
+            C,
+            D,
+            E,
+            F,
+            G,
+            H,
+            I,
+            J,
+            K,
+            L,
+            M,
+            N,
+            O,
+            P,
+            Q,
+            R,
+            S,
+            T,
+            U,
+            V,
+            W,
+            X,
+            Y,
+            Z,
 
-    bool IsKeyPressed(Key key) const {
-        int sc = ScancodeFor(key);
-        return currentKeyState[sc] && !prevKeyState[sc];
-    }
+            Num0,
+            Num1,
+            Num2,
+            Num3,
+            Num4,
+            Num5,
+            Num6,
+            Num7,
+            Num8,
+            Num9,
 
-    bool IsKeyReleased(Key key) const {
-        int sc = ScancodeFor(key);
-        return !currentKeyState[sc] && prevKeyState[sc];
-    }
+            Escape,
+            Space,
+            Enter,
+            Tab,
+            Backspace,
 
-    int GetAxisX() const {
-        if (IsKeyDown(Key::A) && !IsKeyDown(Key::D)) return -1;
-        if (IsKeyDown(Key::D) && !IsKeyDown(Key::A)) return 1;
-        return 0;
-    }
+            Left,
+            Right,
+            Up,
+            Down,
 
-    int GetAxisY() const {
-        if (IsKeyDown(Key::W)) return -1;
-        if (IsKeyDown(Key::S)) return 1;
-        return 0;
-    }
+            Count
+        };
 
-private:
-    static int ScancodeFor(Key key) {
-        switch (key) {
-        case Key::A: return SDL_SCANCODE_A;
-        case Key::D: return SDL_SCANCODE_D;
-        case Key::W: return SDL_SCANCODE_W;
-        case Key::S: return SDL_SCANCODE_S;
-        case Key::Space: return SDL_SCANCODE_SPACE;
-        default: return SDL_SCANCODE_UNKNOWN;
+        enum class MouseButton
+        {
+            Left = 0,
+            Right,
+            Middle,
+            Count
+        };
+
+        void BeginFrame();
+        void HandleEvent(const SDL_Event &event);
+        void Update();
+
+        bool IsKeyDown(Key key) const;
+        bool IsKeyPressed(Key key) const;
+        bool IsKeyReleased(Key key) const;
+
+        bool IsMouseButtonDown(MouseButton button) const;
+        bool IsMouseButtonPressed(MouseButton button) const;
+        bool IsMouseButtonReleased(MouseButton button) const;
+
+        Vector2 GetMousePosition() const;
+
+        int GetAxisX() const
+        {
+            if (IsKeyDown(Key::A) && !IsKeyDown(Key::D))
+                return -1;
+            if (IsKeyDown(Key::D) && !IsKeyDown(Key::A))
+                return 1;
+            return 0;
         }
-    }
 
-    std::vector<bool> currentKeyState = std::vector<bool>(SDL_SCANCODE_COUNT, false);
-    std::vector<bool> prevKeyState = std::vector<bool>(SDL_SCANCODE_COUNT, false);
-};
+        int GetAxisY() const
+        {
+            if (IsKeyDown(Key::W))
+                return -1;
+            if (IsKeyDown(Key::S))
+                return 1;
+            return 0;
+        }
+
+    private:
+        using KeyArray = std::array<bool, static_cast<size_t>(Key::Count)>;
+        using MouseArray = std::array<bool, static_cast<size_t>(MouseButton::Count)>;
+
+        KeyArray currentKeys{};
+        KeyArray prevKeys{};
+
+        MouseArray currentMouse{};
+        MouseArray prevMouse{};
+
+        Vector2 mousePosition{};
+
+        static size_t ToIndex(Key key);
+        static size_t ToIndex(MouseButton button);
+    };
+}
