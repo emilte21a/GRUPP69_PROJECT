@@ -18,8 +18,8 @@ namespace GameEngine
             {
                 pB->GetVelocity().y += pB->GetGravityStrength() * engine.GetDeltaTime();
             }
-            Vector2 newPos = pB->owner->GetPosition() + pB->GetVelocity() * engine.GetDeltaTime();
-            pB->owner->SetPosition(newPos);
+            Vector2 newPos = pB->GetOwner().GetPosition() + pB->GetVelocity() * engine.GetDeltaTime();
+            pB->GetOwner().SetPosition(newPos);
         }
     }
 }

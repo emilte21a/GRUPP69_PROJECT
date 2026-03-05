@@ -123,6 +123,7 @@ namespace GameEngine
     void GameEngine::AddGameObject(std::unique_ptr<GameObject> gameObject)
     {
         gameObjects.push_back(std::move(gameObject));
+        gameObjects.back()->Start();
     }
 
     void GameEngine::RemoveGameObject(GameObject *gameObject)

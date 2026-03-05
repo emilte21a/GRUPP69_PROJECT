@@ -3,13 +3,18 @@
 #include "Constants.h"
 #include "Renderer.h"
 
+void GameObject::Start()
+{
+    for (auto &c : components)
+        c->Start();
+}
+
 void GameObject::Update()
 {
     rect.x = position.x;
     rect.y = position.y;
     for (auto &c : components)
         c->Update();
-    
 }
 
 void GameObject::Draw(SDL_Renderer *ren)

@@ -18,6 +18,10 @@ Player::Player() : Entity()
     SetTag("Player");
 }
 
+void Player::Start(){
+    
+}
+
 void Player::Update()
 {
     GameObject::Update();
@@ -33,8 +37,8 @@ void Player::HandleMove()
 
     float moveX = axis * moveSpeed;
     auto *pB = GetComponent<PhysicsBody>();
-    Vector2 velo (moveX, pB->GetVelocity().y);
-    pB->SetVelocity(velo);  
+    Vector2 velo(moveX, pB->GetVelocity().y);
+    pB->SetVelocity(velo);
 }
 
 void Player::HandleShooting()

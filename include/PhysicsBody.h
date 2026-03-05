@@ -18,8 +18,7 @@ public:
     void SetVelocity(const Vector2 &newVelocity) { velocity = newVelocity; }
     bool IsGrounded() const { return grounded; } // std::fabs(velocity.y) < 0.05f; }
     void SetGrounded(bool setGrounded) { grounded = setGrounded; }
-    bool IsTrigger() const { return isTrigger; }
-    void SetIsTrigger(bool shouldBeTrigger) { isTrigger = shouldBeTrigger; }
+    
 
 private:
     float gravity = 200.0;
@@ -27,5 +26,4 @@ private:
     float elasticity = 1;
     bool useGravity = false;
     bool grounded = false;
-    bool isTrigger = false;
 };

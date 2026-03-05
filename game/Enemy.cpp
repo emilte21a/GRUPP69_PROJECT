@@ -4,6 +4,7 @@
 #include "PhysicsBody.h"
 #include <GameEngine.h>
 #include <iostream>
+#include "Game.h"
 
 Enemy::Enemy() : Entity()
 {
@@ -18,6 +19,10 @@ Enemy::Enemy() : Entity()
     SetTag("Enemy");
 }
 
+void Enemy::Start(){
+
+}
+
 void Enemy::Update()
 {
     GameObject::Update();
@@ -30,6 +35,7 @@ void Enemy::OnCollision(GameObject &other)
 {
     if (other.GetTag() == "Bullet")
     {
+        Game::AddPoint();
         MarkForDestruction();
         other.MarkForDestruction();
     }
@@ -39,14 +45,14 @@ void Enemy::OnEvent(const SDL_Event &event)
 {
 }
 
-float timer = 0;
+float enemyChangeDirectionTimer = 0;
 void Enemy::HandleMove()
 {
-    timer += GameEngine::engine.GetDeltaTime();
-    if (timer >= 1.0)
+    enemyChangeDirectionTimer += GameEngine::engine.GetDeltaTime();
+    if (enemyChangeDirectionTimer >= 1.0)
     {
         dir *= -1;
-        timer -= 1.0;
+        enemyChangeDirectionTimer -= 1.0;
     }
 
     auto *pB = GetComponent<PhysicsBody>();
@@ -60,7 +66,7 @@ void Enemy::HandleJump()
     if (pB->IsGrounded())
     {
         srand(time(0));
-        if (rand() % 101 >= 50)
+        if (rand() % 101 >= 25)
         {
             pB->SetVelocity(Vector2(pB->GetVelocity().x, -jumpForce));
         }

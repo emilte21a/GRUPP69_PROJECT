@@ -4,7 +4,7 @@
 
 int main()
 {
-  Game game {};
+  Game game{};
   GameEngine::engine.Run();
 
   return 0;

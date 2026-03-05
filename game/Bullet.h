@@ -10,7 +10,7 @@ public:
         rect.h /= 8;
         moveSpeed = 400;
         GetComponent<PhysicsBody>()->SetShouldUseGravity(false);
-        GetComponent<PhysicsBody>()->SetIsTrigger(true);
+        GetComponent<Collider>()->SetIsTrigger(true);
         SetTag("Bullet");
     }
 

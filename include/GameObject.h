@@ -18,6 +18,7 @@ public:
     const GameObject &operator=(const GameObject &) = delete;
 
     virtual ~GameObject() = default;
+    virtual void Start();
     virtual void Update();
     virtual void Draw(SDL_Renderer *ren);
     const SDL_FRect &GetRect() const { return rect; }
@@ -40,7 +41,7 @@ public:
     void AddComponent()
     {
         auto comp = std::make_unique<T>();
-        comp->owner = this;
+        comp->SetOwner(this);
         components.push_back(std::move(comp));
     }
 
@@ -48,8 +49,8 @@ public:
     void SetPosition(const Vector2 &newPos) { position = newPos; }
     void SetTag(std::string newTag) { tag = newTag; }
     void MarkForDestruction() { shouldBeDestroyed = true; }
-    bool ShouldBeDestroyed() { return shouldBeDestroyed; }
-    std::string GetTag() { return tag; }
+    bool ShouldBeDestroyed() const { return shouldBeDestroyed; }
+    std::string GetTag() const { return tag; }
 
 protected:
     GameObject() = default;

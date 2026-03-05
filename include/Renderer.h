@@ -21,7 +21,7 @@ public:
     */
     void Draw(SDL_Renderer *ren)
     {
-        SDL_FRect dst = owner->GetRect();
+        SDL_FRect dst = GetOwner().GetRect();
         int maxFrames = 0;
         if (tex)
         {

@@ -2,11 +2,13 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "PhysicsBody.h"
+#include "Collider.h"
 class Entity : public GameObject
 {
 public:
     Entity()
     {
+        AddComponent<Collider>();
         AddComponent<PhysicsBody>();
         AddComponent<Renderer>();
     }

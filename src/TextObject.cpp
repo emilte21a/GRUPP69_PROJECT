@@ -7,9 +7,12 @@ TextObject::TextObject(const std::string &text, const std::string &fontPath, int
     textColor = SDL_Color(color.r, color.g, color.b, color.a);
 
     font = TTF_OpenFont(fontPath.c_str(), fontSize);
-    
+
     AddComponent<Renderer>();
     rendererComponent = GetComponent<Renderer>();
+    if (!rendererComponent)
+        return;
+
     SetTag("Text");
     RebuildTexture();
 }
@@ -48,5 +51,6 @@ void TextObject::RebuildTexture()
 
     SDL_DestroySurface(surface);
 
-    rendererComponent->SetTexture(texture);
+    if (rendererComponent)
+        rendererComponent->SetTexture(texture);
 }

@@ -1,6 +1,7 @@
 #include "CollisionSystem.h"
 #include <GameEngine.h>
 #include "PhysicsBody.h"
+#include "Collider.h"
 #include "GameObject.h"
 #include "Constants.h"
 #include <algorithm>
@@ -18,20 +19,26 @@ namespace GameEngine
                 GameObject *a = gameObjects[i].get();
                 GameObject *b = gameObjects[j].get();
 
-                if (!CheckCollision(a->GetRect(), b->GetRect()))
+                auto aCollider = a->GetComponent<Collider>();
+                auto bCollider = b->GetComponent<Collider>();
+
+                if (!aCollider || !bCollider)
+                    continue;
+                
+                auto aRect = aCollider->GetColliderRectangle();
+                auto bRect = bCollider->GetColliderRectangle();
+
+                if (!CheckCollision(aRect, bRect))
                     continue;
 
-                if (a->GetTag() == "Text" || b->GetTag() == "Text")
-                    continue;
-
-                SDL_FRect collisionRect = GetCollisionRectangle(a->GetRect(), b->GetRect());
+                SDL_FRect collisionRect = GetCollisionRectangle(aRect, bRect);
                 axis resolveAxis = (collisionRect.w < collisionRect.h) ? x : y;
 
                 auto aHasPB = a->GetComponent<PhysicsBody>() != nullptr;
                 auto bHasPB = b->GetComponent<PhysicsBody>() != nullptr;
 
-                bool isTriggerCollision = ((aHasPB && a->GetComponent<PhysicsBody>()->IsTrigger()) ||
-                                           (bHasPB && b->GetComponent<PhysicsBody>()->IsTrigger()));
+                bool isTriggerCollision = ((aHasPB && aCollider->IsTrigger()) ||
+                                           (bHasPB && bCollider->IsTrigger()));
 
                 if (isTriggerCollision)
                 {

@@ -3,18 +3,19 @@
 #include "Tile.h"
 #include "Enemy.h"
 #include "TextObject.h"
+#include "EnemySpawner.h"
 #include <GameEngine.h>
 
 Game::Game()
 {
     GameEngine::engine.SetFpsLimit(160);
     GameEngine::engine.SetBackgroundColor(255, 255, 255, 255);
+    GameEngine::engine.AddGameObject(std::make_unique<EnemySpawner>());
     GameEngine::engine.AddGameObject(std::make_unique<Player>());
-    GameEngine::engine.AddGameObject(std::make_unique<Enemy>());
     PlaceTiles();
     PlacePlatforms();
     auto text = std::make_unique<TextObject>(
-        "Hello world",
+        "points: ",
         constants::arial_str, 32, Color{0, 0, 0, 255});
 
     text->SetPosition({200, 200});
